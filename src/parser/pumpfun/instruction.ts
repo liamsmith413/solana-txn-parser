@@ -8,6 +8,24 @@ type TradeInfo = {
     tokenMint: PublicKey;
     traderTokenAccount: PublicKey;
     trader: PublicKey;
+    timestamp: number;
+    virtualSolReserves: bigint;
+    virtualTokenReserves: bigint;
+};
+
+type CreateInfo = {
+    name: string;
+    symbol: string;
+    uri: string;
+    tokenMint: PublicKey;
+    tokenDecimals: number;
+    createdBy: PublicKey;
+};
+
+type CompleteInfo = {
+    tokenMint: PublicKey;
+    bondingCurve: PublicKey;
+    timestamp: number;
 };
 
 export type DecodedInstructionData = {
@@ -15,5 +33,5 @@ export type DecodedInstructionData = {
 };
 
 export interface PumpFunAction extends BaseParsedAction {
-    info: TradeInfo;
+    info: TradeInfo | CreateInfo | CompleteInfo;
 }
