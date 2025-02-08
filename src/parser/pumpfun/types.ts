@@ -62,7 +62,7 @@ type CompleteInfo = {
     user: PublicKey;
     tokenMint: PublicKey;
     bondingCurve: PublicKey;
-    timestamp: number;
+    timestamp: BigInt;
 };
 
 export interface PumpFunAction extends BaseParsedAction {
