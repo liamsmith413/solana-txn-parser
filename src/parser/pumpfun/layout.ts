@@ -8,8 +8,7 @@ export const CREATE_EVENT_LAYOUT = struct<CreateEvent>([
     stringLayout('uri'),
     pubKey('mint'),
     pubKey('bondingCurve'),
-    pubKey('creator'),
-    u8('feeBps'),
+    pubKey('user')
 ])
 
 export const TRADE_EVENT_LAYOUT = struct<TradeEvent>([

@@ -27,7 +27,8 @@ export class PumpFunParser implements BaseParser<PumpFunTransaction> {
                     symbol: createEvent.symbol,
                     uri: createEvent.uri,
                     tokenMint: createEvent.mint,
-                    createdBy: createEvent.creator,
+                    createdBy: createEvent.user,
+                    bondingCurve: createEvent.bondingCurve,
                     tokenDecimals: 6
                 }
             }

@@ -17,8 +17,8 @@ export type CreateEvent = {
     symbol: string;
     uri: string;
     mint: PublicKey;
-    creator: PublicKey;
-    feeBps: number;
+    bondingCurve: PublicKey;
+    user: PublicKey;
 }
 
 export type CompleteEvent = {
@@ -55,6 +55,7 @@ export type CreateInfo = {
     symbol: string;
     uri: string;
     tokenMint: PublicKey;
+    bondingCurve: PublicKey;
     tokenDecimals: number;
     createdBy: PublicKey;
 };
