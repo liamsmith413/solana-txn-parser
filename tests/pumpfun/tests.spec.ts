@@ -176,7 +176,6 @@ describe('PumpFunParser', () => {
                 createdBy: 'FiYwf895W6ntoitNvhVwBLS4uwKZmMhsxiQmYY44488U',
             },
         ];
-        console.dir(result.actions, { depth: 6 });
         const createActions = result.actions.filter((a) => a.type == 'create');
         expect(createActions).toHaveLength(1);
         expect((createActions[0].info as CreateInfo).name).toBe(expectedActionInfos[0].name);
