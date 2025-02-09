@@ -48,7 +48,7 @@ const pumpTxn = parser.parse(txn)
 
 The parser returns a `PumpFunTransaction` object (or an array of `PumpFunTransaction` objects if `parseMultiple` is called):
 
-### PumpFun Transaction Structure
+#### PumpFun Transaction Structure
 The `PumpFunTransaction` object shows the different operations that occurred in the transaction. These operations are gotten from the events emitted during the transaction execution and are represented by the `PumpFunAction` interface as follows:
 ```typescript
 interface PumpFunTransaction {
@@ -57,7 +57,7 @@ interface PumpFunTransaction {
 }
 ```
 
-### PumpFun Action Structure
+#### PumpFun Action Structure
 The `PumpFunAction` interface contains the three major actions that can occur in a PumpFun transaction (`create`, `complete`, `trade`), with the `info` field containing the relevant information for each action. The info field is of type `TradeInfo`, `CreateInfo`, or `CompleteInfo` depending on the action.
 
 ```typescript
@@ -94,7 +94,9 @@ type CompleteInfo = {
   timestamp: bigint;
 };
 ```
+
 > NB: The `CompleteInfo` event might return unexpected results due to issues with parsing variable length string fields (`name`, `symbol`, `uri`).
+
 
 ### ▶️ Raydium Parser [Comming soon]
 
@@ -133,7 +135,9 @@ class CustomParser extends BaseParser<CustomTransaction> {
   }
 }
 ```
+
 > NB: For anchor specific parsers that rely on events, you can use the `anchorLogScanner` function present in the `src/core/utils` file to get program events from the transaction.
+
 
 ## 🤝 Contributing
 
@@ -160,7 +164,8 @@ You can check the parser directory for more information on how to implement your
 - Update the README.md if your changes affect the usage of the parser.
 - Submit a pull request with your changes, explaining the modifications and their purpose.
 
-> NB:For all contributions, please ensure your code passes all existing tests and include additional tests for the new parser. I also recommend using the `anchorLogScanner` function present in the `src/core/utils` file to get anchor program events from the transaction to avoid having to install anchor library (trying to make this library as lightweight as possible).
+
+> NB: For all contributions, please ensure your code passes all existing tests and include additional tests for the new parser. I also recommend using the `anchorLogScanner` function present in the `src/core/utils` file to get anchor program events from the transaction to avoid having to install anchor library (trying to make this library as lightweight as possible).
 
 ## 🗂️ License
 
