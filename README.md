@@ -19,7 +19,7 @@ npm install git+https://github.com/Tee-py/solana-txn-parser.git
 ### ▶️ PumpFun Parser
 
 ```typescript
-import { PumpFunParser } from 'solana-txn-parser';
+import { PumpFunParser } from 'sol-parser/src';
 import { Connection, PublicKey, clusterApiUrl, ParsedTransactionWithMeta } from '@solana/web3.js';
 import fs from "fs";
 
@@ -48,25 +48,53 @@ const pumpTxn = parser.parse(txn)
 
 The parser returns a `PumpFunTransaction` object (or an array of `PumpFunTransaction` objects if `parseMultiple` is called):
 
+### PumpFun Transaction Structure
+The `PumpFunTransaction` object shows the different operations that occurred in the transaction. These operations are gotten from the events emitted during the transaction execution and are represented by the `PumpFunAction` interface as follows:
 ```typescript
-interface PumpFunTransaction extends BaseParsedTransaction<PumpFunAction> {
-    actions: PumpFunAction[];
-}
-
-type TradeInfo = {
-    solAmount: bigint;    // Amount of SOL involved in the trade
-    tokenAmount: bigint;  // Amount of tokens involved in the trade
-    tokenMint: PublicKey; // Public key of the token mint
-    traderTokenAccount: PublicKey; // Trader's associated token account
-    trader: PublicKey;    // Public key of the trader
-};
-
-interface PumpFunAction extends BaseParsedAction {
-    info: TradeInfo;
+interface PumpFunTransaction {
+  platform: string; // pumpfun
+  actions: PumpFunAction[];
 }
 ```
 
-Each `PumpFunTransaction` contains an array of `PumpFunAction`s, representing the trades made in the transaction. The `TradeInfo` provides detailed information about each trade, including the amounts of SOL and tokens involved, and relevant public keys.
+### PumpFun Action Structure
+The `PumpFunAction` interface contains the three major actions that can occur in a PumpFun transaction (`create`, `complete`, `trade`), with the `info` field containing the relevant information for each action. The info field is of type `TradeInfo`, `CreateInfo`, or `CompleteInfo` depending on the action.
+
+```typescript
+interface PumpFunAction {
+  type: "create" | "complete" | "trade";
+  info: TradeInfo | CreateInfo | CompleteInfo;
+}
+
+type TradeInfo = {
+  solAmount: bigint;
+  tokenAmount: bigint;
+  tokenMint: PublicKey;
+  trader: PublicKey;
+  isBuy: boolean;
+  timestamp: bigint;
+  virtualSolReserves: bigint;
+  virtualTokenReserves: bigint;
+};
+
+type CreateInfo = {
+  name: string;
+  symbol: string;
+  uri: string;
+  tokenMint: PublicKey;
+  bondingCurve: PublicKey;
+  tokenDecimals: number;
+  createdBy: PublicKey;
+};
+
+type CompleteInfo = {
+  user: PublicKey;
+  tokenMint: PublicKey;
+  bondingCurve: PublicKey;
+  timestamp: bigint;
+};
+```
+> NB: The `CompleteInfo` event might return unexpected results due to issues with parsing variable length string fields (`name`, `symbol`, `uri`).
 
 ### ▶️ Raydium Parser [Comming soon]
 
@@ -105,6 +133,7 @@ class CustomParser extends BaseParser<CustomTransaction> {
   }
 }
 ```
+> NB: For anchor specific parsers that rely on events, you can use the `anchorLogScanner` function present in the `src/core/utils` file to get program events from the transaction.
 
 ## 🤝 Contributing
 
@@ -131,7 +160,7 @@ You can check the parser directory for more information on how to implement your
 - Update the README.md if your changes affect the usage of the parser.
 - Submit a pull request with your changes, explaining the modifications and their purpose.
 
-For all contributions, please ensure your code passes all existing tests. You can also help in improving the tests for the existing parsers. 
+> NB:For all contributions, please ensure your code passes all existing tests and include additional tests for the new parser. I also recommend using the `anchorLogScanner` function present in the `src/core/utils` file to get anchor program events from the transaction to avoid having to install anchor library (trying to make this library as lightweight as possible).
 
 ## 🗂️ License
 
