@@ -3,9 +3,9 @@ import { CreateEvent, TradeEvent, CompleteEvent } from './types';
 import { stringLayout, pubKey, uint64, boolean } from '../../core/layout';
 
 export const CREATE_EVENT_LAYOUT = struct<CreateEvent>([
-    stringLayout('name'),
-    stringLayout('symbol'),
-    stringLayout('uri'),
+    stringLayout('name', 20),
+    stringLayout('symbol', 9),
+    stringLayout('uri', 71),
     pubKey('mint'),
     pubKey('bondingCurve'),
     pubKey('user')

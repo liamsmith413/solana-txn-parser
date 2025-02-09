@@ -23,13 +23,13 @@ export const uint64 = (property: string): Layout<BigInt> => {
     return uint64Layout;
 }
 
-export const stringLayout = (property: string): Layout<string> => {
-    const layout = blob(32, property);
+export const stringLayout = (property: string, maxLength: number = 32): Layout<string> => {
+    const layout = blob(maxLength, property);
     const stringLayout = layout as Layout<unknown> as Layout<string>;
     const decode = layout.decode.bind(layout);
     stringLayout.decode = (buffer: Buffer, offset: number) => {
         const src = decode(buffer, offset);
-        return Buffer.from(src).toString('utf-8');
+        return Buffer.from(src).toString('utf-8', 4).trim();
     }
     return stringLayout;
 }

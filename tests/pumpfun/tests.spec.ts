@@ -1,7 +1,7 @@
 import { ParsedTransactionWithMeta } from '@solana/web3.js';
 import { PumpFunParser } from '../../src';
 import fs from 'fs';
-import { TradeInfo } from '../../src/parser/pumpfun/types';
+import { CompleteInfo, CreateInfo, TradeInfo } from '../../src/parser/pumpfun/types';
 describe('PumpFunParser', () => {
     const buyTransaction = JSON.parse(
         fs.readFileSync('tests/pumpfun/parsed-buy-txn.json', 'utf-8')
@@ -103,41 +103,42 @@ describe('PumpFunParser', () => {
     });
 
     test('parse should correctly identify complete action', () => {
-        //const result = parser.parse(sellTransaction);
-
-        // expect(result.platform).toBe('pumpfun');
-        // expect(result.actions).toHaveLength(1);
-        // expect(result.actions[0].type).toBe('sell');
-        // expect(result.actions[0].info.solAmount.toString()).toBe('3556271');
-        // expect(result.actions[0].info.tokenAmount.toString()).toBe('94443000000');
-        // expect(result.actions[0].info.tokenMint.toString()).toBe(
-        //     'FstBRGMkNKf4wNvfieYUPS9YsbNoQJMCh6v89zajpump'
-        // );
-        // expect(result.actions[0].info.trader.toString()).toBe(
-        //     '3P2pmfQAFTwcC1xWtYbVYoRn3hngya8Kd9jMaF5GfnUa'
-        // );
-        // expect(result.actions[0].info.traderTokenAccount.toString()).toBe(
-        //     'HhE4skfuuxsbmhn5fRByP1y8A8tWJwuwHWi4x9UXGC88'
-        // );
+        const result = parser.parse(completeTransaction);
+        const expectedActionInfos = [{
+            tokenMint: "B9ktH3g7mwgdoDgCgGRim6qeqPcyRVWJueXS12CMpump",
+            bondingCurve: "5dhRAEw3LfUMTJcPqYSyasH45jHnWeZQmM2Hccic59SZ",
+            user: "niggerd597QYedtvjQDVHZTCCGyJrwHNm2i49dkm5zS",
+            timestamp: "1738104027",
+        }]
+        const completeActions = result.actions.filter((a) => a.type == 'complete');
+        expect(completeActions).toHaveLength(1);
+        expect((completeActions[0].info as CompleteInfo).tokenMint.toString()).toBe(expectedActionInfos[0].tokenMint);
+        expect((completeActions[0].info as CompleteInfo).bondingCurve.toString()).toBe(expectedActionInfos[0].bondingCurve);
+        expect((completeActions[0].info as CompleteInfo).user.toString()).toBe(expectedActionInfos[0].user);
+        expect((completeActions[0].info as CompleteInfo).timestamp.toString()).toBe(expectedActionInfos[0].timestamp);
     });
 
     test('parse should correctly identify create action', () => {
-        //const result = parser.parse(sellTransaction);
-
-        // expect(result.platform).toBe('pumpfun');
-        // expect(result.actions).toHaveLength(1);
-        // expect(result.actions[0].type).toBe('sell');
-        // expect(result.actions[0].info.solAmount.toString()).toBe('3556271');
-        // expect(result.actions[0].info.tokenAmount.toString()).toBe('94443000000');
-        // expect(result.actions[0].info.tokenMint.toString()).toBe(
-        //     'FstBRGMkNKf4wNvfieYUPS9YsbNoQJMCh6v89zajpump'
-        // );
-        // expect(result.actions[0].info.trader.toString()).toBe(
-        //     '3P2pmfQAFTwcC1xWtYbVYoRn3hngya8Kd9jMaF5GfnUa'
-        // );
-        // expect(result.actions[0].info.traderTokenAccount.toString()).toBe(
-        //     'HhE4skfuuxsbmhn5fRByP1y8A8tWJwuwHWi4x9UXGC88'
-        // );
+        const result = parser.parse(createTransaction);
+        const expectedActionInfos = [{
+            name: "Blue Strip Fiend",
+            symbol: "Mosey",
+            uri: "https://ipfs.io/ipfs/QmQQAzxeHfPDRma1dNhcBP4k9ej4epU9U2T818FyEG7izP",
+            tokenMint: "7F7TeMsGutc2YpxeH7U3PiFLwG2FygN2jMLeDKAXNbwu",
+            bondingCurve: "6qK8Cazc6dqMSCfgN455J7aw1hHgknb6PeY8gjkAL4BE",
+            tokenDecimals: 6,
+            createdBy: "FiYwf895W6ntoitNvhVwBLS4uwKZmMhsxiQmYY44488U",
+        }]
+        console.dir(result.actions, { depth: 6 });
+        const createActions = result.actions.filter((a) => a.type == 'create');
+        expect(createActions).toHaveLength(1);
+        expect((createActions[0].info as CreateInfo).name).toBe(expectedActionInfos[0].name);
+        expect((createActions[0].info as CreateInfo).symbol).toBe(expectedActionInfos[0].symbol);
+        expect((createActions[0].info as CreateInfo).uri).toBe(expectedActionInfos[0].uri);
+        expect((createActions[0].info as CreateInfo).tokenMint.toString()).toBe(expectedActionInfos[0].tokenMint);
+        expect((createActions[0].info as CreateInfo).bondingCurve.toString()).toBe(expectedActionInfos[0].bondingCurve);
+        expect((createActions[0].info as CreateInfo).createdBy.toString()).toBe(expectedActionInfos[0].createdBy);
+        expect((createActions[0].info as CreateInfo).tokenDecimals).toBe(expectedActionInfos[0].tokenDecimals);
     });
 
     test('parseMultiple should parse multiple transactions', () => {
