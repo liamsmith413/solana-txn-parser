@@ -16,7 +16,7 @@ npm install git+https://github.com/Tee-py/solana-txn-parser.git
 
 ## 👨🏽‍💻 Usage
 
-### ▶️ PumpFun Parser
+### 🎰 PumpFun Parser
 
 ```typescript
 import { PumpFunParser } from 'sol-parser/src';
@@ -44,11 +44,11 @@ const txn = JSON.parse(fs.readFileSync("<file_path>", "utf-8")) as unknown as Pa
 const pumpTxn = parser.parse(txn)
 ```
 
-#### Output Structure
+#### 📦 Output Structure
 
 The parser returns a `PumpFunTransaction` object (or an array of `PumpFunTransaction` objects if `parseMultiple` is called):
 
-#### PumpFun Transaction Structure
+#### 🎰 PumpFun Transaction Structure
 The `PumpFunTransaction` object shows the different operations that occurred in the transaction. These operations are gotten from the events emitted during the transaction execution and are represented by the `PumpFunAction` interface as follows:
 ```typescript
 interface PumpFunTransaction {
@@ -98,11 +98,11 @@ type CompleteInfo = {
 > NB: The `CompleteInfo` event might return unexpected results due to issues with parsing variable length string fields (`name`, `symbol`, `uri`).
 
 
-### ▶️ Raydium Parser [Comming soon]
+### 🔄 Raydium Parser [Comming soon]
 
-### ▶️ Jupiter Parser [Coming soon]
+### 🔄 Jupiter Parser [Coming soon]
 
-### ▶️ Creating Custom Parsers
+### 🧰 Creating Custom Parsers
 
 You can create custom parsers for other DeFi platforms by extending the `BaseParser` class:
 
