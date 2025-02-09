@@ -39,17 +39,18 @@ export type TradeEvent = {
     virtualTokenReserves: BigInt;
 }
 
-type TradeInfo = {
+export type TradeInfo = {
     solAmount: BigInt;
     tokenAmount: BigInt;
     tokenMint: PublicKey;
     trader: PublicKey;
+    isBuy: boolean;
     timestamp: BigInt;
     virtualSolReserves: BigInt;
     virtualTokenReserves: BigInt;
 };
 
-type CreateInfo = {
+export type CreateInfo = {
     name: string;
     symbol: string;
     uri: string;
@@ -58,7 +59,7 @@ type CreateInfo = {
     createdBy: PublicKey;
 };
 
-type CompleteInfo = {
+export type CompleteInfo = {
     user: PublicKey;
     tokenMint: PublicKey;
     bondingCurve: PublicKey;

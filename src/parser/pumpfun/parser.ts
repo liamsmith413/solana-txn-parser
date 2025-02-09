@@ -41,6 +41,7 @@ export class PumpFunParser implements BaseParser<PumpFunTransaction> {
                     tokenAmount: tradeEvent.tokenAmount,
                     tokenMint: tradeEvent.mint,
                     trader: tradeEvent.user,
+                    isBuy: tradeEvent.isBuy,
                     timestamp: tradeEvent.timestamp,
                     virtualSolReserves: tradeEvent.virtualSolReserves,
                     virtualTokenReserves: tradeEvent.virtualTokenReserves,
