@@ -1,7 +1,7 @@
 import { ParsedTransactionWithMeta, PublicKey } from '@solana/web3.js';
 import { BaseParser } from '../../core/base';
-import { PumpFunTransaction } from './transaction';
 import {
+    PumpFunTransaction,
     PumpFunAction,
     CREATE_EVENT_SIG,
     COMPLETE_EVENT_SIG,

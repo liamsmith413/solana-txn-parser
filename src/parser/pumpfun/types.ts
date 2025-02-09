@@ -1,4 +1,5 @@
 import { PublicKey } from '@solana/web3.js';
+import { BaseParsedTransaction } from '../../core/base';
 import { BaseParsedAction } from '../../core/base';
 
 export const CREATE_EVENT_SIG = 'event:CreateEvent';
@@ -69,4 +70,8 @@ export type CompleteInfo = {
 
 export interface PumpFunAction extends BaseParsedAction {
     info: TradeInfo | CreateInfo | CompleteInfo;
+}
+
+export interface PumpFunTransaction extends BaseParsedTransaction<PumpFunAction> {
+    actions: PumpFunAction[];
 }
