@@ -8,9 +8,9 @@ export const pubKey = (property: string): Layout<PublicKey> => {
     pubKeyLayout.decode = (buffer: Buffer, offset: number) => {
         const src = decode(buffer, offset);
         return new PublicKey(src);
-    }
+    };
     return pubKeyLayout;
-}
+};
 
 export const uint64 = (property: string): Layout<BigInt> => {
     const layout = blob(8, property);
@@ -19,9 +19,9 @@ export const uint64 = (property: string): Layout<BigInt> => {
     uint64Layout.decode = (buffer: Buffer, offset: number) => {
         const src = decode(buffer, offset);
         return Buffer.from(src).readBigUInt64LE();
-    }
+    };
     return uint64Layout;
-}
+};
 
 export const stringLayout = (property: string, maxLength: number = 32): Layout<string> => {
     const layout = blob(maxLength, property);
@@ -30,9 +30,9 @@ export const stringLayout = (property: string, maxLength: number = 32): Layout<s
     stringLayout.decode = (buffer: Buffer, offset: number) => {
         const src = decode(buffer, offset);
         return Buffer.from(src).toString('utf-8', 4).trim();
-    }
+    };
     return stringLayout;
-}
+};
 
 export const boolean = (property: string): Layout<boolean> => {
     const layout = blob(1, property);
@@ -41,6 +41,6 @@ export const boolean = (property: string): Layout<boolean> => {
     booleanLayout.decode = (buffer: Buffer, offset: number) => {
         const src = decode(buffer, offset);
         return src[0] === 1;
-    }
+    };
     return booleanLayout;
-}
+};

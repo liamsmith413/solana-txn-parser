@@ -37,7 +37,7 @@ export const anchorLogScanner = (logs: string[], programId: string) => {
 
 export const createAnchorSigHash = (sig: string) => {
     return Buffer.from(sha256(sig).slice(0, 8));
-}
+};
 
 export const flattenInnerInstructions = (transaction: ParsedTransactionWithMeta) => {
     const flattended = [];

@@ -1,23 +1,28 @@
 import { ParsedTransactionWithMeta, PublicKey } from '@solana/web3.js';
 import { BaseParser } from '../../core/base';
 import { PumpFunTransaction } from './transaction';
-import { PumpFunAction, CREATE_EVENT_SIG, COMPLETE_EVENT_SIG, TRADE_EVENT_SIG, ActionType } from './types';
+import {
+    PumpFunAction,
+    CREATE_EVENT_SIG,
+    COMPLETE_EVENT_SIG,
+    TRADE_EVENT_SIG,
+    ActionType,
+} from './types';
 import { createAnchorSigHash } from '../../core/utils';
 import { anchorLogScanner } from '../../core/utils';
 import { CREATE_EVENT_LAYOUT, COMPLETE_EVENT_LAYOUT, TRADE_EVENT_LAYOUT } from './layout';
 
 export class PumpFunParser implements BaseParser<PumpFunTransaction> {
-
     private readonly discriminators = {
         create: createAnchorSigHash(CREATE_EVENT_SIG),
         trade: createAnchorSigHash(TRADE_EVENT_SIG),
-        complete: createAnchorSigHash(COMPLETE_EVENT_SIG)
+        complete: createAnchorSigHash(COMPLETE_EVENT_SIG),
     } as const;
-    readonly PROGRAM_ID = new PublicKey("6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P");
+    readonly PROGRAM_ID = new PublicKey('6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P');
 
     decodeEvent(event: string): PumpFunAction {
-        const discriminator = Buffer.from(event, "base64").slice(0, 8);
-        const remainder = Buffer.from(event, "base64").slice(8);
+        const discriminator = Buffer.from(event, 'base64').slice(0, 8);
+        const remainder = Buffer.from(event, 'base64').slice(8);
         if (discriminator.equals(this.discriminators.create)) {
             const createEvent = CREATE_EVENT_LAYOUT.decode(remainder);
             return {
@@ -29,9 +34,9 @@ export class PumpFunParser implements BaseParser<PumpFunTransaction> {
                     tokenMint: createEvent.mint,
                     createdBy: createEvent.user,
                     bondingCurve: createEvent.bondingCurve,
-                    tokenDecimals: 6
-                }
-            }
+                    tokenDecimals: 6,
+                },
+            };
         }
         if (discriminator.equals(this.discriminators.trade)) {
             const tradeEvent = TRADE_EVENT_LAYOUT.decode(remainder);
@@ -46,8 +51,8 @@ export class PumpFunParser implements BaseParser<PumpFunTransaction> {
                     timestamp: tradeEvent.timestamp,
                     virtualSolReserves: tradeEvent.virtualSolReserves,
                     virtualTokenReserves: tradeEvent.virtualTokenReserves,
-                }
-            }
+                },
+            };
         }
         if (discriminator.equals(this.discriminators.complete)) {
             const completeEvent = COMPLETE_EVENT_LAYOUT.decode(remainder);
@@ -57,14 +62,14 @@ export class PumpFunParser implements BaseParser<PumpFunTransaction> {
                     user: completeEvent.user,
                     tokenMint: completeEvent.mint,
                     bondingCurve: completeEvent.bondingCurve,
-                    timestamp: completeEvent.timestamp
-                }
-            }
+                    timestamp: completeEvent.timestamp,
+                },
+            };
         }
         return {
             type: ActionType.UNKNOWN,
-            info: {}
-        } as PumpFunAction
+            info: {},
+        } as PumpFunAction;
     }
 
     parse(transaction: ParsedTransactionWithMeta): PumpFunTransaction {
@@ -72,8 +77,11 @@ export class PumpFunParser implements BaseParser<PumpFunTransaction> {
             actions: [],
             platform: 'pumpfun',
         };
-        const events = anchorLogScanner(transaction.meta?.logMessages ?? [], this.PROGRAM_ID.toBase58());
-        const actions = events.map(event => this.decodeEvent(event));
+        const events = anchorLogScanner(
+            transaction.meta?.logMessages ?? [],
+            this.PROGRAM_ID.toBase58()
+        );
+        const actions = events.map((event) => this.decodeEvent(event));
         transactionResult.actions = actions;
         return transactionResult;
     }

@@ -9,7 +9,7 @@ export enum ActionType {
     CREATE = 'create',
     COMPLETE = 'complete',
     TRADE = 'trade',
-    UNKNOWN = 'unknown'
+    UNKNOWN = 'unknown',
 }
 
 export type CreateEvent = {
@@ -19,14 +19,14 @@ export type CreateEvent = {
     mint: PublicKey;
     bondingCurve: PublicKey;
     user: PublicKey;
-}
+};
 
 export type CompleteEvent = {
     user: PublicKey;
     mint: PublicKey;
     bondingCurve: PublicKey;
     timestamp: BigInt;
-}
+};
 
 export type TradeEvent = {
     mint: PublicKey;
@@ -37,7 +37,7 @@ export type TradeEvent = {
     timestamp: BigInt;
     virtualSolReserves: BigInt;
     virtualTokenReserves: BigInt;
-}
+};
 
 export type TradeInfo = {
     solAmount: BigInt;

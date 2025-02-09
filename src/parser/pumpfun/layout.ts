@@ -8,8 +8,8 @@ export const CREATE_EVENT_LAYOUT = struct<CreateEvent>([
     stringLayout('uri', 71),
     pubKey('mint'),
     pubKey('bondingCurve'),
-    pubKey('user')
-])
+    pubKey('user'),
+]);
 
 export const TRADE_EVENT_LAYOUT = struct<TradeEvent>([
     pubKey('mint'),
@@ -20,11 +20,11 @@ export const TRADE_EVENT_LAYOUT = struct<TradeEvent>([
     uint64('timestamp'),
     uint64('virtualSolReserves'),
     uint64('virtualTokenReserves'),
-])
+]);
 
 export const COMPLETE_EVENT_LAYOUT = struct<CompleteEvent>([
     pubKey('user'),
     pubKey('mint'),
     pubKey('bondingCurve'),
     uint64('timestamp'),
-])
+]);
