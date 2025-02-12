@@ -23,6 +23,17 @@ export const uint64 = (property: string): Layout<BigInt> => {
     return uint64Layout;
 };
 
+export const uint128 = (property: string): Layout<BigInt> => {
+    const layout = blob(16, property);
+    const uint128Layout = layout as Layout<unknown> as Layout<BigInt>;
+    const decode = layout.decode.bind(layout);
+    uint128Layout.decode = (buffer: Buffer, offset: number) => {
+        const src = decode(buffer, offset);
+        return Buffer.from(src).readBigUInt64LE();
+    };
+    return uint128Layout;
+};
+
 export const stringLayout = (property: string, maxLength: number = 32): Layout<string> => {
     const layout = blob(maxLength, property);
     const stringLayout = layout as Layout<unknown> as Layout<string>;
