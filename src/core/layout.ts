@@ -12,9 +12,9 @@ export const pubKey = (property: string): Layout<PublicKey> => {
     return pubKeyLayout;
 };
 
-export const uint64 = (property: string): Layout<BigInt> => {
+export const uint64 = (property: string): Layout<bigint> => {
     const layout = blob(8, property);
-    const uint64Layout = layout as Layout<unknown> as Layout<BigInt>;
+    const uint64Layout = layout as Layout<unknown> as Layout<bigint>;
     const decode = layout.decode.bind(layout);
     uint64Layout.decode = (buffer: Buffer, offset: number) => {
         const src = decode(buffer, offset);
@@ -23,9 +23,9 @@ export const uint64 = (property: string): Layout<BigInt> => {
     return uint64Layout;
 };
 
-export const uint128 = (property: string): Layout<BigInt> => {
+export const uint128 = (property: string): Layout<bigint> => {
     const layout = blob(16, property);
-    const uint128Layout = layout as Layout<unknown> as Layout<BigInt>;
+    const uint128Layout = layout as Layout<unknown> as Layout<bigint>;
     const decode = layout.decode.bind(layout);
     uint128Layout.decode = (buffer: Buffer, offset: number) => {
         const src = decode(buffer, offset);

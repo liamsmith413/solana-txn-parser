@@ -26,29 +26,29 @@ export type CompleteEvent = {
     user: PublicKey;
     mint: PublicKey;
     bondingCurve: PublicKey;
-    timestamp: BigInt;
+    timestamp: bigint;
 };
 
 export type TradeEvent = {
     mint: PublicKey;
-    solAmount: BigInt;
-    tokenAmount: BigInt;
+    solAmount: bigint;
+    tokenAmount: bigint;
     isBuy: boolean;
     user: PublicKey;
-    timestamp: BigInt;
-    virtualSolReserves: BigInt;
-    virtualTokenReserves: BigInt;
+    timestamp: bigint;
+    virtualSolReserves: bigint;
+    virtualTokenReserves: bigint;
 };
 
 export type TradeInfo = {
-    solAmount: BigInt;
-    tokenAmount: BigInt;
+    solAmount: bigint;
+    tokenAmount: bigint;
     tokenMint: PublicKey;
     trader: PublicKey;
     isBuy: boolean;
-    timestamp: BigInt;
-    virtualSolReserves: BigInt;
-    virtualTokenReserves: BigInt;
+    timestamp: bigint;
+    virtualSolReserves: bigint;
+    virtualTokenReserves: bigint;
 };
 
 export type CreateInfo = {
