@@ -39,10 +39,33 @@ export const createAnchorSigHash = (sig: string) => {
     return Buffer.from(sha256(sig).slice(0, 8));
 };
 
-export const flattenInnerInstructions = (transaction: ParsedTransactionWithMeta) => {
+export const flattenTransactionInstructions = (transaction: ParsedTransactionWithMeta) => {
+    // Takes a parsed transaction and creates a sorted array of all the instructions (including cpi calls)
+    let txnIxs = transaction.transaction.message.instructions
+    let cpiIxs = transaction.meta?.innerInstructions?.sort((a, b) => a.index - b.index) || []
+    const totalCalls = cpiIxs.reduce((acc, ix) => acc + ix.instructions.length, 0) + txnIxs.length
+
     const flattended = [];
+    let lastPushedIx = -1;
+    let currCallIndex = -1;
+    for (const cpiIx of cpiIxs) {
+        while (lastPushedIx != cpiIx.index) {
+            lastPushedIx += 1
+            currCallIndex += 1
+            flattended.push(txnIxs[lastPushedIx])
+        }
+        for (const innerIx of cpiIx.instructions) {
+            flattended.push(innerIx)
+            currCallIndex += 1
+        }
+    } 
     for (const innerIx of transaction.meta?.innerInstructions || []) {
         flattended.push(...innerIx.instructions);
+    }
+    while (currCallIndex < totalCalls - 1) {
+        lastPushedIx += 1
+        currCallIndex += 1
+        flattended.push(txnIxs[lastPushedIx])
     }
     return flattended;
 };
