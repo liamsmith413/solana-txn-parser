@@ -191,7 +191,6 @@ export class RaydiumV4Parser implements AsyncBaseParser<RaydiumV4Transaction> {
             (ix) => ix.programId.toString() === RayV4Program.toString()
         );
         if (instructions.length == 0) return null;
-        console.log(decodedLogs);
         const result: RaydiumV4Transaction = {
             platform: 'raydiumv4',
             actions: [],

@@ -59,9 +59,6 @@ export const flattenTransactionInstructions = (transaction: ParsedTransactionWit
             currCallIndex += 1;
         }
     }
-    for (const innerIx of transaction.meta?.innerInstructions || []) {
-        flattended.push(...innerIx.instructions);
-    }
     while (currCallIndex < totalCalls - 1) {
         lastPushedIx += 1;
         currCallIndex += 1;

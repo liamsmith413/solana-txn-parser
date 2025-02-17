@@ -1,136 +1,50 @@
 import { ParsedTransactionWithMeta, PublicKey } from '@solana/web3.js';
-import { getAccountSOLBalanceChange } from '../../src/core/utils';
+import fs from 'fs';
+import { getAccountSOLBalanceChange, flattenTransactionInstructions } from '../../src/core/utils';
 
 describe('Transaction Parser Utils', () => {
-    describe('flattenInnerInstructions', () => {
-        it('should flatten inner instructions', () => {
-            // const txnData = {
-            //     meta: {
-            //         innerInstructions: [
-            //             {
-            //                 index: 3,
-            //                 instructions: [
-            //                     {
-            //                         parsed: {
-            //                             info: {
-            //                                 extensionTypes: ['immutableOwner'],
-            //                                 mint: 'FstBRGMkNKf4wNvfieYUPS9YsbNoQJMCh6v89zajpump',
-            //                             },
-            //                             type: 'getAccountDataSize',
-            //                         },
-            //                         program: 'spl-token',
-            //                         programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-            //                         stackHeight: 2,
-            //                     },
-            //                     {
-            //                         parsed: {
-            //                             info: {
-            //                                 lamports: 2039280,
-            //                                 newAccount:
-            //                                     'HoB5DAFC69L8SzD5F1uJDEFZ3CDFy4ceA7Z1kyNMKy7B',
-            //                                 owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-            //                                 source: '4SrXdKFYoiUfYzWN7YV8kdJ2TkZieDmjVCEJg4mTAun6',
-            //                                 space: 165,
-            //                             },
-            //                             type: 'createAccount',
-            //                         },
-            //                         program: 'system',
-            //                         programId: '11111111111111111111111111111111',
-            //                         stackHeight: 2,
-            //                     },
-            //                     {
-            //                         parsed: {
-            //                             info: {
-            //                                 account: 'HoB5DAFC69L8SzD5F1uJDEFZ3CDFy4ceA7Z1kyNMKy7B',
-            //                             },
-            //                             type: 'initializeImmutableOwner',
-            //                         },
-            //                         program: 'spl-token',
-            //                         programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-            //                         stackHeight: 2,
-            //                     },
-            //                     {
-            //                         parsed: {
-            //                             info: {
-            //                                 account: 'HoB5DAFC69L8SzD5F1uJDEFZ3CDFy4ceA7Z1kyNMKy7B',
-            //                                 mint: 'FstBRGMkNKf4wNvfieYUPS9YsbNoQJMCh6v89zajpump',
-            //                                 owner: '4SrXdKFYoiUfYzWN7YV8kdJ2TkZieDmjVCEJg4mTAun6',
-            //                             },
-            //                             type: 'initializeAccount3',
-            //                         },
-            //                         program: 'spl-token',
-            //                         programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-            //                         stackHeight: 2,
-            //                     },
-            //                 ],
-            //             },
-            //             {
-            //                 index: 4,
-            //                 instructions: [
-            //                     {
-            //                         parsed: {
-            //                             info: {
-            //                                 amount: '724879458841',
-            //                                 authority:
-            //                                     'BtMzrjEpmLTk4ZGdaS9VVp1jfneoyc1AWsU8ko7ffnug',
-            //                                 destination:
-            //                                     'HoB5DAFC69L8SzD5F1uJDEFZ3CDFy4ceA7Z1kyNMKy7B',
-            //                                 source: '8NETDunyVnrNA44qUqUd8Km8XdfYyyujcWWVX7uDs9eE',
-            //                             },
-            //                             type: 'transfer',
-            //                         },
-            //                         program: 'spl-token',
-            //                         programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-            //                         stackHeight: 2,
-            //                     },
-            //                     {
-            //                         parsed: {
-            //                             info: {
-            //                                 destination:
-            //                                     'BtMzrjEpmLTk4ZGdaS9VVp1jfneoyc1AWsU8ko7ffnug',
-            //                                 lamports: 79645349,
-            //                                 source: '4SrXdKFYoiUfYzWN7YV8kdJ2TkZieDmjVCEJg4mTAun6',
-            //                             },
-            //                             type: 'transfer',
-            //                         },
-            //                         program: 'system',
-            //                         programId: '11111111111111111111111111111111',
-            //                         stackHeight: 2,
-            //                     },
-            //                     {
-            //                         parsed: {
-            //                             info: {
-            //                                 destination:
-            //                                     'CebN5WGQ4jvEPvsVU4EoHEpgzq1VV7AbicfhtW4xC9iM',
-            //                                 lamports: 796453,
-            //                                 source: '4SrXdKFYoiUfYzWN7YV8kdJ2TkZieDmjVCEJg4mTAun6',
-            //                             },
-            //                             type: 'transfer',
-            //                         },
-            //                         program: 'system',
-            //                         programId: '11111111111111111111111111111111',
-            //                         stackHeight: 2,
-            //                     },
-            //                     {
-            //                         accounts: ['Ce6TQqeHC9p8KetsN6JsjHK7UTZk7nasjjnr7XxXp9F1'],
-            //                         data: '2K7nL28PxCW8ejnyCeuMpbXuNBx6UiXevhCQQ1w3jKAeKaFaH7ikhYLsMshRzKzkbCVALEmd1UApmG3sFB22TosE2Dtys87YGfNa2TxnLSZvrzzmbmoU5DXeqJNDrauFJmNunBsDcWm8thbg44BhtkyLhTd4CfdBRENZw1enwnBhB1pY9CWo116fBP4j',
-            //                         programId: '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P',
-            //                         stackHeight: 2,
-            //                     },
-            //                 ],
-            //             },
-            //         ],
-            //     },
-            // } as unknown as ParsedTransactionWithMeta;
-            // const result = flattenInnerInstructions(txnData!);
-            // expect(result).toHaveLength(8);
+    describe('flattenTransactionInstructions', () => {
+        it('should handle empty inner instructions', () => {
+            const mockTransaction = {
+                transaction: {
+                    message: {
+                        instructions: [{
+                            accounts: [
+                                "acct-1",
+                                "acct-2",
+                                "acct-3"
+                            ],
+                            data: "0xray-test",
+                            programId: "hello-there"
+                        }, {
+                            accounts: [
+                                "acct-1",
+                                "acct-2",
+                                "acct-3"
+                            ],
+                            data: "0xray-test",
+                            programId: "hello-hyy"
+                        }]
+                    }
+                },
+                meta: {}
+            };
+    
+            const result = flattenTransactionInstructions(mockTransaction as any);
+            expect(result.length).toEqual(2);
+            expect(result[0].programId).toEqual("hello-there")
+            expect(result[1].programId).toEqual("hello-hyy")
         });
 
-        it('should return an empty array if no inner instructions', () => {
-            // const mockTransaction = { meta: {} };
-            // const result = flattenInnerInstructions(mockTransaction as any);
-            // expect(result).toHaveLength(0);
-        });
+        it('should handle instructions with inner cpi calls', () => {
+            const testTxn = JSON.parse(
+                fs.readFileSync('tests/raydium/parsed-swap-txn.json', 'utf-8')
+            ) as unknown as ParsedTransactionWithMeta;
+
+            const result = flattenTransactionInstructions(testTxn)
+            console.log(result)
+            expect(result.length).toEqual(15)
+        })
     });
 
     describe('getAccountSOLBalanceChange', () => {
