@@ -67,7 +67,12 @@ export class RaydiumV4Parser implements AsyncBaseParser<RaydiumV4Transaction> {
         const poolInfo = await this.connection.getAccountInfo(new PublicKey(poolId));
         if (!poolInfo) return null;
         const parsedInfo = RAY_AMM_V4_POOL_LAYOUT.decode(poolInfo.data);
-        this.poolInfoCache.set(poolId, parsedInfo);
+        this.poolInfoCache.set(poolId, {
+            baseMint: parsedInfo.baseMint,
+            quoteMint: parsedInfo.quoteMint,
+            baseDecimal: parsedInfo.baseDecimal,
+            quoteDecimal: parsedInfo.quoteDecimal
+        });
         return parsedInfo;
     }
 

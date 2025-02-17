@@ -59,7 +59,7 @@ export const SWAP_BASE_OUT_LAYOUT = struct<SwapBaseOut>([
     uint64('amountIn'),
 ]);
 
-export const RAY_AMM_V4_POOL_LAYOUT = struct<PoolInfo>([
+export const RAY_AMM_V4_POOL_LAYOUT = struct<PoolInfo & { padding: Uint8Array}>([
     uint64('status'),
     uint64('nonce'),
     uint64('maxOrder'),
