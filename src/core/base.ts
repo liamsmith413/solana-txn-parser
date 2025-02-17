@@ -13,3 +13,8 @@ export interface BaseParser<T extends BaseParsedTransaction<BaseParsedAction>> {
     parse(transaction: ParsedTransactionWithMeta): T | null;
     parseMultiple(transactions: ParsedTransactionWithMeta[]): T[] | null;
 }
+
+export interface AsyncBaseParser<T extends BaseParsedTransaction<BaseParsedAction>> {
+    parse(transaction: ParsedTransactionWithMeta): Promise<T | null>;
+    parseMultiple(transactions: ParsedTransactionWithMeta[]): Promise<T[] | null>;
+}
