@@ -42,7 +42,6 @@ describe('Transaction Parser Utils', () => {
             ) as unknown as ParsedTransactionWithMeta;
 
             const result = flattenTransactionInstructions(testTxn)
-            console.log(result)
             expect(result.length).toEqual(15)
         })
     });
