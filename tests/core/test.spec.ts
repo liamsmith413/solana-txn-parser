@@ -28,8 +28,8 @@ describe('Transaction Parser Utils', () => {
 
             const result = flattenTransactionInstructions(mockTransaction as any);
             expect(result.length).toEqual(2);
-            expect(result[0].programId).toEqual('hello-there');
-            expect(result[1].programId).toEqual('hello-hyy');
+            expect((result as {programId: string}[])[0].programId).toEqual('hello-there');
+            expect((result as {programId: string}[])[0].programId).toEqual('hello-hyy');
         });
 
         it('should handle instructions with inner cpi calls', () => {
