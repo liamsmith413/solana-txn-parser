@@ -8,32 +8,27 @@ describe('Transaction Parser Utils', () => {
             const mockTransaction = {
                 transaction: {
                     message: {
-                        instructions: [{
-                            accounts: [
-                                "acct-1",
-                                "acct-2",
-                                "acct-3"
-                            ],
-                            data: "0xray-test",
-                            programId: "hello-there"
-                        }, {
-                            accounts: [
-                                "acct-1",
-                                "acct-2",
-                                "acct-3"
-                            ],
-                            data: "0xray-test",
-                            programId: "hello-hyy"
-                        }]
-                    }
+                        instructions: [
+                            {
+                                accounts: ['acct-1', 'acct-2', 'acct-3'],
+                                data: '0xray-test',
+                                programId: 'hello-there',
+                            },
+                            {
+                                accounts: ['acct-1', 'acct-2', 'acct-3'],
+                                data: '0xray-test',
+                                programId: 'hello-hyy',
+                            },
+                        ],
+                    },
                 },
-                meta: {}
+                meta: {},
             };
-    
+
             const result = flattenTransactionInstructions(mockTransaction as any);
             expect(result.length).toEqual(2);
-            expect(result[0].programId).toEqual("hello-there")
-            expect(result[1].programId).toEqual("hello-hyy")
+            expect(result[0].programId).toEqual('hello-there');
+            expect(result[1].programId).toEqual('hello-hyy');
         });
 
         it('should handle instructions with inner cpi calls', () => {
@@ -41,9 +36,9 @@ describe('Transaction Parser Utils', () => {
                 fs.readFileSync('tests/raydium/parsed-swap-txn.json', 'utf-8')
             ) as unknown as ParsedTransactionWithMeta;
 
-            const result = flattenTransactionInstructions(testTxn)
-            expect(result.length).toEqual(15)
-        })
+            const result = flattenTransactionInstructions(testTxn);
+            expect(result.length).toEqual(15);
+        });
     });
 
     describe('getAccountSOLBalanceChange', () => {
