@@ -92,6 +92,8 @@ export type CreatePoolInfo = {
     baseAmountIn: bigint;
     quoteAmountIn: bigint;
     user: PublicKey;
+    baseMint: PublicKey;
+    quoteMint: PublicKey;
     poolId: PublicKey;
     marketId: PublicKey;
 };

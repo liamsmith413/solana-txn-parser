@@ -44,18 +44,19 @@ export class RaydiumV4Parser implements AsyncBaseParser<RaydiumV4Transaction> {
         const logData = msg.match(/^Program log: ray_log: (.+)$/)?.[1] ?? msg;
         const logBuffer = Buffer.from(logData, 'base64');
         const logType = logBuffer.slice(0, 1).readInt8();
+        const dataBuffer = logBuffer.slice(1, );
 
         switch (logType) {
             case INIT_LOG_TYPE:
-                return INIT_POOL_LAYOUT.decode(logBuffer);
+                return {...INIT_POOL_LAYOUT.decode(dataBuffer), logType};
             case DEPOSIT_LOG_TYPE:
-                return DEPOSIT_LAYOUT.decode(logBuffer);
+                return {...DEPOSIT_LAYOUT.decode(dataBuffer), logType};
             case WITHDRAW_LOG_TYPE:
-                return WITHDRAW_LAYOUT.decode(logBuffer);
+                return {...WITHDRAW_LAYOUT.decode(dataBuffer), logType};
             case SWAP_BASE_IN_LOG_TYPE:
-                return SWAP_BASE_IN_LAYOUT.decode(logBuffer);
+                return {...SWAP_BASE_IN_LAYOUT.decode(dataBuffer), logType};
             case SWAP_BASE_OUT_LOG_TYPE:
-                return SWAP_BASE_OUT_LAYOUT.decode(logBuffer);
+                return {...SWAP_BASE_OUT_LAYOUT.decode(dataBuffer), logType};
             default:
                 return null;
         }
@@ -129,6 +130,8 @@ export class RaydiumV4Parser implements AsyncBaseParser<RaydiumV4Transaction> {
                 timestamp: parsedLog.timestamp,
                 baseAmountIn: parsedLog.baseAmountIn,
                 quoteAmountIn: parsedLog.quoteAmountIn,
+                baseMint: instruction.accounts[8],
+                quoteMint: instruction.accounts[9],
                 marketId: parsedLog.marketId,
                 user: instruction.accounts[17],
                 poolId: instruction.accounts[4],
@@ -159,7 +162,7 @@ export class RaydiumV4Parser implements AsyncBaseParser<RaydiumV4Transaction> {
 
     private async handleWithdraw(parsedLog: Withdraw, instruction: { accounts: PublicKey[] }) {
         const poolId = instruction.accounts[1];
-        const user = instruction.accounts[16];
+        const user = instruction.accounts[18];
         const poolInfo = await this.getPoolInfo(poolId.toString());
         if (!poolInfo) return null;
         return {
@@ -230,12 +233,14 @@ export class RaydiumV4Parser implements AsyncBaseParser<RaydiumV4Transaction> {
                     continue;
             }
         }
-        return null;
+        return result;
     }
 
     async parseMultiple(
         transactions: ParsedTransactionWithMeta[]
     ): Promise<RaydiumV4Transaction[] | null> {
-        return null;
+        return (await Promise.all(transactions.map(async (txn) => {
+            return await this.parse(txn)
+        }))).filter(res => res !== null)
     }
 }
