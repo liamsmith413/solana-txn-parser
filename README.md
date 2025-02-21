@@ -14,7 +14,7 @@
 
 ## 👨‍🔧 Installation
 ```bash
-npm install git+https://github.com/Tee-py/solana-txn-parser.git
+npm i solana-parser
 ```
 
 ## 👨🏽‍💻 Usage
