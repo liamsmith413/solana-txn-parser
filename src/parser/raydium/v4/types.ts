@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js';
-import { BaseParsedAction, BaseParsedTransaction } from 'core/base';
+import { BaseParsedAction, BaseParsedTransaction } from '../../../core/base';
 
 export const RayV4Program = new PublicKey('675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8');
 
@@ -139,9 +139,11 @@ export type SwapInfo = {
 };
 
 export interface RaydiumV4Action extends BaseParsedAction {
+    type: string
     info: CreatePoolInfo | AddLiquidityInfo | RemoveLiquidityInfo | SwapInfo;
 }
 
 export interface RaydiumV4Transaction extends BaseParsedTransaction<RaydiumV4Action> {
+    platform: "raydiumv4"
     actions: RaydiumV4Action[];
 }

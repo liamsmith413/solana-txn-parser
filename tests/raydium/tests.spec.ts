@@ -6,7 +6,7 @@ import {
     CreatePoolInfo,
     RemoveLiquidityInfo,
     SwapInfo,
-} from 'parser/raydium/v4/types';
+} from '../../src/parser/raydium/v4/types';
 
 describe('Raydium Parser', () => {
     const swapBaseInTransaction = JSON.parse(
