@@ -1,6 +1,10 @@
-# 🚀 solana-txn-parser
+<div align="center">
+<div>
+  <img src="https://solscan.io/_next/static/media/solana-sol-logo.ecf2bf3a.svg" height=50px></img><h1> solana-transaction-parser</h1>
+</div>
 
-An open-source transaction parser for popular DeFi applications on the Solana blockchain, written in TypeScript.
+<h3>An open-source and lightweight transaction parser for popular DeFi applications on the Solana blockchain, written in TypeScript.</h3>
+</div>
 
 ## 💪🏽 Supported DeFi Platforms
 
