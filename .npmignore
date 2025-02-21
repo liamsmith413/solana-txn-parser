@@ -1,0 +1,14 @@
+src/
+tests/
+idl/
+node_modules/
+tsconfig.json
+jest.config.js
+.github/
+.gitignore
+*.log
+.prettierrc.json
+.prettierignore
+*.tsbuildinfo
+LICENSE
+README.md
