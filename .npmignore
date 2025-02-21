@@ -10,5 +10,4 @@ jest.config.js
 .prettierrc.json
 .prettierignore
 *.tsbuildinfo
-LICENSE
-README.md
+package-test/

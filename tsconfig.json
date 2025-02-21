@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "commonjs",
+    "module": "NodeNext",
     "lib": ["ES2020"],
     "declaration": true,
     "declarationMap": true,
@@ -12,7 +12,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,                                    
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "composite": true,
     "declarationDir": "./dist/types"
