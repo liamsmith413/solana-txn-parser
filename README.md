@@ -5,11 +5,10 @@ An open-source transaction parser for popular DeFi applications on the Solana bl
 ## 💪🏽 Supported DeFi Platforms
 
 - PumpFun ✅
-- Raydium 🔜
+- RaydiumV4 ✅
 - Jupiter 🔜
 
 ## 👨‍🔧 Installation
-
 ```bash
 npm install git+https://github.com/Tee-py/solana-txn-parser.git
 ```
@@ -98,7 +97,33 @@ type CompleteInfo = {
 > NB: The `CompleteInfo` event might return unexpected results due to issues with parsing variable length string fields (`name`, `symbol`, `uri`).
 
 
-### 🔄 Raydium Parser [Comming soon]
+### 🧑🏼‍🚀 RaydiumV4 Parser
+```typescript
+import { RaydiumV4Parser } from 'sol-parser/src';
+import { Connection, PublicKey, clusterApiUrl, ParsedTransactionWithMeta } from '@solana/web3.js';
+import fs from "fs";
+
+const connection = new Connection(clusterApiUrl('mainnet-beta'));
+// set max size of lru cache for caching decoded pool info 
+const parser = new RaydiumV4Parser(connection, { maxPoolCache: 20 });
+
+// Fetch a transaction
+const txnSig = '<transaction_signature>'
+const txn1 = await connection.getParsedTransaction(txnSig);
+
+// Parse single transaction
+const result = await parser.parse(transaction);
+console.log(result);
+
+// Parse multiple transactions
+const txnSig2 = '<second transaction signature>'
+const txn2 = await connection.getParsedTransaction(txnSig2)
+const results = await parser.parseMultiple([txn1, txn2])
+
+// Parse transaction from json file
+const txn = JSON.parse(fs.readFileSync("<file_path>", "utf-8")) as unknown as ParsedTransactionWithMeta
+const result = parser.parse(txn)
+```
 
 ### 🔄 Jupiter Parser [Coming soon]
 
