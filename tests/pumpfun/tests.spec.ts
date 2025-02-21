@@ -196,11 +196,11 @@ describe('PumpFunParser', () => {
     });
 
     test('parseMultiple should parse multiple transactions', () => {
-        //const results = parser.parseMultiple([buyTransaction, sellTransaction]);
-        // expect(results).toHaveLength(2);
-        // expect(results[0].platform).toBe('pumpfun');
-        // expect(results[1].platform).toBe('pumpfun');
-        // expect(results[0].actions[0].type == 'buy');
-        // expect(results[1].actions[0].type == 'sell');
+        const results = parser.parseMultiple([buyTransaction, sellTransaction]);
+        expect(results).toHaveLength(2);
+        expect(results[0].platform).toBe('pumpfun');
+        expect(results[1].platform).toBe('pumpfun');
+        expect(results[0].actions[0].type == 'buy');
+        expect(results[1].actions[0].type == 'sell');
     });
 });
