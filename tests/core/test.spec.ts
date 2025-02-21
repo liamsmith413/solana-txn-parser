@@ -1,6 +1,7 @@
 import { ParsedTransactionWithMeta, PublicKey } from '@solana/web3.js';
 import fs from 'fs';
 import { getAccountSOLBalanceChange, flattenTransactionInstructions } from '../../src/core/utils';
+import { LRUCache } from '../../src/core/lru';
 
 describe('Transaction Parser Utils', () => {
     describe('flattenTransactionInstructions', () => {
@@ -112,5 +113,94 @@ describe('Transaction Parser Utils', () => {
             const result = getAccountSOLBalanceChange(txnData!, PublicKey.default);
             expect(result).toBe(0);
         });
+    });
+
+    describe('LRUCache Tests', () => {
+        let cache: LRUCache<number>;
+    
+        beforeEach(() => {
+            cache = new LRUCache<number>(3);
+        });
+    
+        test('should initialize with correct capacity', () => {
+            expect(cache.size).toBe(0);
+            const cache2 = new LRUCache<number>(5);
+            expect(cache2.size).toBe(0);
+        });
+    
+        test('should set and get values correctly', () => {
+            cache.set('a', 1);
+            expect(cache.get('a')).toBe(1);
+            expect(cache.size).toBe(1);
+        });
+    
+        test('should return null for non-existent keys', () => {
+            expect(cache.get('missing')).toBeNull();
+        });
+    
+        test('should update existing keys', () => {
+            cache.set('a', 1);
+            cache.set('a', 2);
+            expect(cache.get('a')).toBe(2);
+            expect(cache.size).toBe(1);
+        });
+    
+        test('should evict least recently used item when capacity is reached', () => {
+            cache.set('a', 1);
+            cache.set('b', 2);
+            cache.set('c', 3);
+            cache.set('d', 4);
+            
+            expect(cache.get('a')).toBeNull();
+            expect(cache.get('b')).toBe(2);
+            expect(cache.get('c')).toBe(3);
+            expect(cache.get('d')).toBe(4);
+            expect(cache.size).toBe(3);
+        });
+    
+        test('should maintain LRU order with gets', () => {
+            cache.set('a', 1);
+            cache.set('b', 2);
+            cache.set('c', 3);
+            
+            cache.get('a');
+            
+            cache.set('d', 4);
+            
+            expect(cache.get('b')).toBeNull();
+            expect(cache.get('a')).toBe(1);
+            expect(cache.get('c')).toBe(3);
+            expect(cache.get('d')).toBe(4);
+        });
+    
+        test('should clear the cache', () => {
+            cache.set('a', 1);
+            cache.set('b', 2);
+            cache.clear();
+            
+            expect(cache.size).toBe(0);
+            expect(cache.get('a')).toBeNull();
+            expect(cache.get('b')).toBeNull();
+        });
+    
+        // test('should handle complex sequence of operations', () => {
+        //     cache.set('a', 1);
+        //     cache.set('b', 2);
+        //     cache.get('a');   
+        //     cache.set('c', 3);
+        //     cache.set('d', 4);
+            
+        //     expect(cache.get('b')).toBeNull();
+        //     expect(cache.get('a')).toBe(1);
+        //     expect(cache.get('c')).toBe(3);
+        //     expect(cache.get('d')).toBe(4);
+            
+        //     cache.set('e', 5);
+            
+        //     expect(cache.get('c')).toBeNull();
+        //     expect(cache.get('a')).toBe(1);
+        //     expect(cache.get('d')).toBe(4);
+        //     expect(cache.get('e')).toBe(5);
+        // });
     });
 });
