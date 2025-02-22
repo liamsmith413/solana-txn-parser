@@ -22,7 +22,7 @@ npm i solana-parser
 ### 🎰 PumpFun Parser
 
 ```typescript
-import { PumpFunParser } from 'sol-parser/src';
+import { PumpFunParser } from 'solana-parser';
 import { Connection, PublicKey, clusterApiUrl, ParsedTransactionWithMeta } from '@solana/web3.js';
 import fs from "fs";
 
@@ -98,7 +98,7 @@ type CompleteInfo = {
 };
 ```
 
-> NB: The `CompleteInfo` event might return unexpected results due to issues with parsing variable length string fields (`name`, `symbol`, `uri`).
+> NB: The `CreateInfo` event might return unexpected results due to issues with parsing variable length string fields (`name`, `symbol`, `uri`).
 
 
 ### 🧑🏼‍🚀 RaydiumV4 Parser
