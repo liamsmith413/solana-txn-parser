@@ -98,9 +98,6 @@ type CompleteInfo = {
 };
 ```
 
-> NB: The `CreateInfo` event might return unexpected results due to issues with parsing variable length string fields (`name`, `symbol`, `uri`).
-
-
 ### 🧑🏼‍🚀 RaydiumV4 Parser
 ```typescript
 import { RaydiumV4Parser } from 'sol-parser/src';
