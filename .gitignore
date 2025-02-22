@@ -4,3 +4,4 @@ dist
 *.tgz
 *.tsbuildinfo
 package-test/
+.DS_Store
