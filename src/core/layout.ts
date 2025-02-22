@@ -34,14 +34,20 @@ export const uint128 = (property: string): Layout<bigint> => {
     return uint128Layout;
 };
 
-export const stringLayout = (property: string, maxLength: number = 32): Layout<string> => {
-    const layout = blob(maxLength, property);
+export const stringLayout = (property: string): Layout<string> => {
+    const layout = blob(4, property);
     const stringLayout = layout as Layout<unknown> as Layout<string>;
-    const decode = layout.decode.bind(layout);
+    
     stringLayout.decode = (buffer: Buffer, offset: number) => {
-        const src = decode(buffer, offset);
-        return Buffer.from(src).toString('utf-8', 4).trim();
+        const length = buffer.readUInt32LE(offset);
+        return buffer.slice(offset + 4, offset + 4 + length).toString('utf-8');
     };
+
+    stringLayout.getSpan = (buffer: Buffer, offset: number) => {
+        const length = buffer.readUInt32LE(offset);
+        return 4 + length;
+    };
+
     return stringLayout;
 };
 
