@@ -20,7 +20,7 @@ export class PumpFunParser implements BaseParser<PumpFunTransaction> {
     } as const;
     readonly PROGRAM_ID = new PublicKey('6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P');
 
-    decodeEvent(event: string): PumpFunAction {
+    private decodeEvent(event: string): PumpFunAction {
         const discriminator = Buffer.from(event, 'base64').slice(0, 8);
         const remainder = Buffer.from(event, 'base64').slice(8);
         if (discriminator.equals(this.discriminators.create)) {
