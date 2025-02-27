@@ -13,12 +13,16 @@ describe('Transaction Parser Utils', () => {
                             {
                                 accounts: ['acct-1', 'acct-2', 'acct-3'],
                                 data: '0xray-test',
-                                programId: new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"),
+                                programId: new PublicKey(
+                                    'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
+                                ),
                             },
                             {
                                 accounts: ['acct-1', 'acct-2', 'acct-3'],
                                 data: '0xray-test',
-                                programId: new PublicKey("B9ktH3g7mwgdoDgCgGRim6qeqPcyRVWJueXS12CMpump"),
+                                programId: new PublicKey(
+                                    'B9ktH3g7mwgdoDgCgGRim6qeqPcyRVWJueXS12CMpump'
+                                ),
                             },
                         ],
                     },
@@ -28,8 +32,12 @@ describe('Transaction Parser Utils', () => {
 
             const result = flattenTransactionInstructions(mockTransaction as any);
             expect(result.length).toEqual(2);
-            expect((result as {programId: PublicKey}[])[0].programId.toString()).toEqual("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
-            expect((result as {programId: PublicKey}[])[1].programId.toString()).toEqual("B9ktH3g7mwgdoDgCgGRim6qeqPcyRVWJueXS12CMpump");
+            expect((result as { programId: PublicKey }[])[0].programId.toString()).toEqual(
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
+            );
+            expect((result as { programId: PublicKey }[])[1].programId.toString()).toEqual(
+                'B9ktH3g7mwgdoDgCgGRim6qeqPcyRVWJueXS12CMpump'
+            );
         });
 
         it('should handle instructions with inner cpi calls', () => {

@@ -139,11 +139,11 @@ export type SwapInfo = {
 };
 
 export interface RaydiumV4Action extends BaseParsedAction {
-    type: string
+    type: string;
     info: CreatePoolInfo | AddLiquidityInfo | RemoveLiquidityInfo | SwapInfo;
 }
 
 export interface RaydiumV4Transaction extends BaseParsedTransaction<RaydiumV4Action> {
-    platform: "raydiumv4"
+    platform: 'raydiumv4';
     actions: RaydiumV4Action[];
 }

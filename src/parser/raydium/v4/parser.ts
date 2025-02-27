@@ -95,9 +95,16 @@ export class RaydiumV4Parser implements AsyncBaseParser<RaydiumV4Transaction> {
                         baseReserve: parsedLog.baseReserve,
                         quoteReserve: parsedLog.quoteReserve,
                         tokenIn: parsedLog.direction == 1n ? poolInfo.quoteMint : poolInfo.baseMint,
-                        tokenInDecimal: parsedLog.direction == 1n ? poolInfo.quoteDecimal : poolInfo.baseDecimal,
-                        tokenOut: parsedLog.direction == 1n ? poolInfo.baseMint : poolInfo.quoteMint,
-                        tokenOutDecimal: parsedLog.direction == 1n ? poolInfo.baseDecimal : poolInfo.quoteDecimal,
+                        tokenInDecimal:
+                            parsedLog.direction == 1n
+                                ? poolInfo.quoteDecimal
+                                : poolInfo.baseDecimal,
+                        tokenOut:
+                            parsedLog.direction == 1n ? poolInfo.baseMint : poolInfo.quoteMint,
+                        tokenOutDecimal:
+                            parsedLog.direction == 1n
+                                ? poolInfo.baseDecimal
+                                : poolInfo.quoteDecimal,
                         user,
                         poolId,
                     },

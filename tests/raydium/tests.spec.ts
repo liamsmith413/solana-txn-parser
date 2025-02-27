@@ -24,7 +24,7 @@ describe('Raydium Parser', () => {
     const removeLiquidityTransaction = JSON.parse(
         fs.readFileSync('tests/raydium/parsed-withdraw-txn.json', 'utf-8')
     ) as unknown as ParsedTransactionWithMeta;
-    const connection = new Connection(clusterApiUrl('mainnet-beta'));
+    const connection = new Connection(clusterApiUrl("mainnet-beta"));
     const parser = new RaydiumV4Parser(connection, { maxPoolCache: 100 });
 
     test('parse should correctly identify swap action [base in]', async () => {
@@ -162,5 +162,51 @@ describe('Raydium Parser', () => {
             removeLiquidityTransaction,
         ]);
         expect(result?.length).toEqual(5);
+    });
+
+    test('Edge cases tests', async () => {
+        const txn1 = JSON.parse(
+            fs.readFileSync('tests/raydium/swap-edge-1.json', 'utf-8')
+        ) as unknown as ParsedTransactionWithMeta;
+        const txn2 = JSON.parse(
+            fs.readFileSync('tests/raydium/swap-edge-2.json', 'utf-8')
+        ) as unknown as ParsedTransactionWithMeta;
+        const parsed = await parser.parseMultiple([txn1!, txn2!])
+
+        // checks for the first
+        expect((parsed || [])[0].platform).toEqual('raydiumv4');
+        expect((parsed || [])[0].actions.length).toEqual(1);
+        for (const action of (parsed || [])[0].actions || []) {
+            expect(action.type).toEqual('swap');
+            expect(action.info.poolId.toString()).toEqual(
+                'FeMTcuyjT3KWd1f1f5n5MaXnUZRSwchtwtwV6R7XPk86'
+            );
+            expect((action.info as SwapInfo).tokenIn.toString()).toEqual(
+                '4qu5jPY7dDkmtB6Q4iECFyWjaESTfwiAK86g99yPpump'
+            );
+            expect((action.info as SwapInfo).tokenOut.toString()).toEqual(
+                'So11111111111111111111111111111111111111112'
+            );
+            expect((action.info as SwapInfo).tokenInDecimal).toEqual(BigInt(6));
+            expect((action.info as SwapInfo).tokenOutDecimal).toEqual(BigInt(9));
+        }
+
+        // checks for the second
+        expect((parsed || [])[1].platform).toEqual('raydiumv4');
+        expect((parsed || [])[1].actions.length).toEqual(1);
+        for (const action of (parsed || [])[1].actions || []) {
+            expect(action.type).toEqual('swap');
+            expect(action.info.poolId.toString()).toEqual(
+                'FeMTcuyjT3KWd1f1f5n5MaXnUZRSwchtwtwV6R7XPk86'
+            );
+            expect((action.info as SwapInfo).tokenIn.toString()).toEqual(
+                'So11111111111111111111111111111111111111112'
+            );
+            expect((action.info as SwapInfo).tokenOut.toString()).toEqual(
+                '4qu5jPY7dDkmtB6Q4iECFyWjaESTfwiAK86g99yPpump'
+            );
+            expect((action.info as SwapInfo).tokenInDecimal).toEqual(BigInt(9));
+            expect((action.info as SwapInfo).tokenOutDecimal).toEqual(BigInt(6));
+        }
     });
 });

@@ -37,7 +37,7 @@ export const uint128 = (property: string): Layout<bigint> => {
 export const stringLayout = (property: string): Layout<string> => {
     const layout = blob(4, property);
     const stringLayout = layout as Layout<unknown> as Layout<string>;
-    
+
     stringLayout.decode = (buffer: Buffer, offset: number) => {
         const length = buffer.readUInt32LE(offset);
         return buffer.slice(offset + 4, offset + 4 + length).toString('utf-8');
